@@ -8,13 +8,22 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class LoginTests {
 
     private WebDriver driver;
+    private Logger logger;
+
     @BeforeMethod(alwaysRun = true)
     @Parameters("browser")
     public void setup(@Optional("chrome") String browser) {
-        System.out.println("Running test in " + browser);
+
+        logger = Logger.getLogger(LoginTests.class.getName());
+        logger.setLevel(Level.INFO);
+
+        logger.info("Running test in " + browser);
         switch (browser.toLowerCase()) {
             case "chrome":
                 driver = new ChromeDriver();
@@ -23,6 +32,7 @@ public class LoginTests {
                 driver = new FirefoxDriver();
                 break;
             default:
+                logger.warning("Tests will be run in Chrome, configuration for " + browser + " is missing");
                 driver = new ChromeDriver();
                 break;
         }
@@ -34,9 +44,11 @@ public class LoginTests {
     public void tearDown() {
         driver.quit();
     }
+
     @Parameters({"username", "password", "expectedErrorMessage"})
     @Test(groups = {"positive", "regression", "smoke"})
     public void testLoginFunctionality()   {
+        logger.info("Starting testLoginFunctionality");
 // Type username student into Username field
         WebElement userNameField = driver.findElement(By.id("username"));
         userNameField.sendKeys("student");
@@ -51,10 +63,12 @@ public class LoginTests {
         String actualUrl = driver.getCurrentUrl();
         Assert.assertEquals(actualUrl, expectUrl);
 // Verify new page contains expected text ('Congratulations' or 'successfully logged in')
+        logger.info("Verify Logged In Successfully");
         String expectText = "Logged In Successfully";
         String pageSource = driver.getPageSource();
         Assert.assertTrue(pageSource.contains(expectText));
 // Verify button Log out is displayed on the new page
+        logger.info("Assertion for log out");
         WebElement logOutButton = driver.findElement(By.linkText("Log out"));
         Assert.assertTrue(logOutButton.isDisplayed());
     }
@@ -69,7 +83,6 @@ public class LoginTests {
 //Push Submit button
         WebElement submitButton = driver.findElement(By.id("submit"));
         submitButton.click();
-
         try{
             Thread.sleep(2000);
         } catch (InterruptedException e){
@@ -115,12 +128,15 @@ public class LoginTests {
     @Test(groups = {"neootive", "regression"})
     public void negativeLoginTest(String username, String password, String expectedErrorMessage)   {
 // Type username student into Username field
+        logger.info("Input username");
         WebElement userNameField = driver.findElement(By.id("username"));
         userNameField.sendKeys(username);
 // Type password Password123 into Password field
+        logger.info("Input password");
         WebElement passwordField = driver.findElement(By.id("password"));
         passwordField.sendKeys(password);
 // Push Submit button
+        logger.info("click submit");
         WebElement submitButton = driver.findElement(By.id("submit"));
         submitButton.click();
         //Verify error message is displayed
@@ -129,9 +145,11 @@ public class LoginTests {
         } catch (InterruptedException e){
             throw new RuntimeException(e);
         }
+        logger.info("Verify error message is displayed");
         WebElement errorMessage = driver.findElement(By.id("error"));
         Assert.assertTrue(errorMessage.isDisplayed());
 //Verify error message text is Your username is invalid!
+        logger.info("Verify error message text");
         String actualText = errorMessage.getText();
         Assert.assertEquals(actualText,expectedErrorMessage);
         driver.quit();
