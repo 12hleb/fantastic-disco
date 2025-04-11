@@ -72,7 +72,7 @@ public class LoginTests {
         WebElement logOutButton = driver.findElement(By.linkText("Log out"));
         Assert.assertTrue(logOutButton.isDisplayed());
     }
-    @Test(groups = {"negotive", "regression"})
+    @Test(groups = {"negative", "regression"})
     public void incorrectUserNameTest() {
 //Type username incorrectUser into Username field
         WebElement userNameField = driver.findElement(By.id("username"));
@@ -97,7 +97,7 @@ public class LoginTests {
         Assert.assertEquals(actualText,expectedText);
         driver.quit();
     }
-    @Test(groups = {"neootive", "regression"})
+    @Test(groups = {"negative", "regression"})
     public void incorrectPasswordTest() {
 //Type username student into Username field
         WebElement userNameField = driver.findElement(By.id("username"));
@@ -125,7 +125,7 @@ public class LoginTests {
     }
 
     @Parameters({"username", "password", "expectedErrorMessage"})
-    @Test(groups = {"neootive", "regression"})
+    @Test(groups = {"negative", "regression"})
     public void negativeLoginTest(String username, String password, String expectedErrorMessage)   {
 // Type username student into Username field
         logger.info("Input username");
