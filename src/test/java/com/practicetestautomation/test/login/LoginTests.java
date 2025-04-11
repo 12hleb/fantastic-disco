@@ -8,7 +8,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LoginTests {
@@ -36,12 +35,12 @@ public class LoginTests {
                 driver = new ChromeDriver();
                 break;
         }
-        driver = new ChromeDriver();
         driver.get("https://practicetestautomation.com/practice-test-login/");
     }
 
     @AfterMethod(alwaysRun = true)
     public void tearDown() {
+        logger.info("Close browser");
         driver.quit();
     }
 
@@ -152,6 +151,5 @@ public class LoginTests {
         logger.info("Verify error message text");
         String actualText = errorMessage.getText();
         Assert.assertEquals(actualText,expectedErrorMessage);
-        driver.quit();
     }
 }
