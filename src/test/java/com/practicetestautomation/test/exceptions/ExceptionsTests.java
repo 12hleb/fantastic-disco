@@ -8,6 +8,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import java.time.Duration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,7 +37,7 @@ public class ExceptionsTests {
                 driver = new ChromeDriver();
                 break;
         }
-
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         //Open page
         driver.get("https://practicetestautomation.com/practice-test-exceptions/");
     }
