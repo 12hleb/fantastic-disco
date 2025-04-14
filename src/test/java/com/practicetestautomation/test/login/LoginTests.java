@@ -8,6 +8,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LoginTests {
