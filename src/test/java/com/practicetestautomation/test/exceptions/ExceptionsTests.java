@@ -62,4 +62,46 @@ public class ExceptionsTests {
         WebElement row2InputField = driver.findElement(By.xpath("//div[@id='row2']/input"));
         Assert.assertTrue(row2InputField.isDisplayed(), "Row input 2 is not displayed");
     }
+    @Test
+    public void TimeoutExceptionTest (){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        //Click Add button
+        WebElement addButton = driver.findElement(By.id("add_btn"));
+        addButton.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row2']/input")));
+        //Verify Row 2 input field is displayed
+        WebElement row2InputField = driver.findElement(By.xpath("//div[@id='row2']/input"));
+        Assert.assertTrue(row2InputField.isDisplayed(), "Row input 2 is not displayed");
+    }
+
+    @Test
+    public void ElementNotInteractableExceptionTest(){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        //Click Add button
+        WebElement addButton = driver.findElement(By.id("add_btn"));
+        addButton.click();
+        //Wait for the second row to load
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row2']/input")));
+        //Type text into the second input field
+        WebElement row2InputField = driver.findElement(By.xpath("//div[@id='row2']/input"));
+        Assert.assertTrue(row2InputField.isDisplayed(), "Row input 2 is not displayed");
+
+        row2InputField.sendKeys("Kebab");
+
+        //Push Save button using locator By.name(“Save”)
+        WebElement saveButton = driver.findElement(By.name("Save"));
+        saveButton.click();
+
+        //Verify text saved
+        WebElement successMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("confirmation")));
+        String actualMessage = successMessage.getText();
+        String expectedMessage = "Row 2 was saved";
+
+        Assert.assertEquals(actualMessage, expectedMessage, "Message is not expected");
+    }
+
+
 }
